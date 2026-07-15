@@ -5,6 +5,7 @@ export class ViewArticlePage {
     this.page = page;
     this.userId = userId;
     this.articleTitleHeader = page.getByRole('heading');
+    this.editlink = page.getByRole('link', { name: 'Edit Article' }).first();
   }
 
   authorLinkInArticleHeader(username) {
@@ -12,7 +13,7 @@ export class ViewArticlePage {
   }
 
   tagListItem(tagName) {
-    return this.page.getByRole('listitem').filter({ hasText: tagName });
+    return this.page.getByText(tagName, { exact: true });
   }
 
   async step(title, stepToRun) {
@@ -26,6 +27,12 @@ export class ViewArticlePage {
   async open(url) {
     await this.step(`Open 'View Article' page`, async () => {
       await this.page.goto(url);
+    });
+  }
+
+  async clickEditLink() {
+    await this.step(`Click the 'Edit Article' link`, async () => {
+      await this.editlink.click();
     });
   }
 
@@ -56,5 +63,14 @@ export class ViewArticlePage {
         await expect(this.tagListItem(tags[i])).toBeVisible();
       }
     });
+  }
+
+    async assertArticleTagsIsDeleted(tags) {
+    for (const tag of tags) {
+      await this.step(`Assert the article tag "${tag}" is deleted`, 
+        async () => {
+          await expect(this.page.getByText(tag)).toHaveCount(0);
+      });
+    }
   }
 }
