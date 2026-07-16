@@ -8,6 +8,14 @@ export class ViewArticlePage {
     this.editlink = page.getByRole('link', { name: 'Edit Article' }).first();
   }
 
+  url() {
+    return this.page.url();
+  }
+
+  async step(title, stepToRun) {
+    return await testStep(title, stepToRun, this.userId);
+  }
+
   authorLinkInArticleHeader(username) {
     return this.page.getByRole('link', { username }).first();
   }
@@ -16,12 +24,16 @@ export class ViewArticlePage {
     return this.page.getByText(tagName, { exact: true });
   }
 
-  async step(title, stepToRun) {
-    return await testStep(title, stepToRun, this.userId);
+  followButton(username) {
+    return this.page
+      .getByRole('button', { name: `Follow ${username}` })
+      .first();
   }
 
-  url() {
-    return this.page.url();
+  unfollowButton(username) {
+    return this.page
+      .getByRole('button', { name: `Unfollow ${username}` })
+      .first();
   }
 
   async open(url) {
@@ -33,6 +45,12 @@ export class ViewArticlePage {
   async clickEditLink() {
     await this.step(`Click the 'Edit Article' link`, async () => {
       await this.editlink.click();
+    });
+  }
+
+  async clickFollowButton(username) {
+    await this.step(`Click the 'Follow ${username}' button`, async () => {
+      await this.followButton(username).click();
     });
   }
 
@@ -65,12 +83,32 @@ export class ViewArticlePage {
     });
   }
 
-    async assertArticleTagsIsDeleted(tags) {
+  async assertArticleTagsIsDeleted(tags) {
     for (const tag of tags) {
-      await this.step(`Assert the article tag "${tag}" is deleted`, 
+      await this.step(
+        `Assert the article tag "${tag}" is deleted`,
         async () => {
           await expect(this.page.getByText(tag)).toHaveCount(0);
-      });
+        },
+      );
     }
+  }
+
+  async assertFollowButtonIsVisible(username) {
+    await this.step(
+      `Assert the 'Follow ${username}' button is visible`,
+      async () => {
+        await expect(this.followButton(username)).toBeVisible();
+      },
+    );
+  }
+
+  async assertUnfollowButtonIsVisible(username) {
+    await this.step(
+      `Assert the 'Unfollow ${username}' button is visible`,
+      async () => {
+        await expect(this.unfollowButton(username)).toBeVisible();
+      },
+    );
   }
 }

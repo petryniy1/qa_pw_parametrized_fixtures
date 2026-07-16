@@ -13,7 +13,7 @@ export async function createArticle(page, article, userId = 0) {
       await createArticlePage.submitCreateArticleForm(article);
 
       await viewArticlePage.assertArticleTitleIsVisible(article.title);
-      
+
       return viewArticlePage.url();
     },
     userId,

@@ -15,7 +15,7 @@ testParameters.forEach(({ tagsNumber, testNameEnding }) => {
     });
 
     test.beforeEach(async ({ page, user }) => {
-      await signUpUser(page, user);
+      await signUpUser(page, user, 1);
     });
 
     test(`Remove all tags from article with ${testNameEnding}`, async ({

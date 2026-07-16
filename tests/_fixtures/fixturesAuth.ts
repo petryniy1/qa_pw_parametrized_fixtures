@@ -4,10 +4,9 @@ import { SignInPage } from '../../src/ui/pages/auth/SignInPage';
 import { HomePage } from '../../src/ui/pages/HomePage';
 
 export const test = base.extend<{
-  signUpUsers;
-  signUpPage;
-  signInPage;
-  homePage;
+  signUpPage: SignUpPage;
+  signInPage: SignInPage;
+  homePage: HomePage;
 }>({
   signUpPage: async ({ page }, use) => {
     const signUpPage = new SignUpPage(page);

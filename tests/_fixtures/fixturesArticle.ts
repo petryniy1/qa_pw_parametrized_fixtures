@@ -16,7 +16,9 @@ export const test = base.extend<{
   articleWithoutTags: Article;
   articleWithOneTag: Article;
   articleWithTags: Article;
+  newArticles: Article[];
   articleTagsNumber: number;
+  newArticlesNumber: number;
   createArticlePage: CreateArticlePage;
   viewArticlePage: ViewArticlePage;
   editArticlePage: EditArticlePage;
@@ -33,11 +35,21 @@ export const test = base.extend<{
     await use(article);
   },
   articleTagsNumber: [0, { option: true }],
-
+  newArticlesNumber: [1, { option: true }],
   articleWithTags: async ({ logger, articleTagsNumber }, use) => {
     const article = generateNewArticleData(logger, articleTagsNumber);
 
     await use(article);
+  },
+  newArticles: async (
+    { logger, articleTagsNumber, newArticlesNumber },
+    use,
+  ) => {
+    const newArticles = Array.from({ length: newArticlesNumber }, () =>
+      generateNewArticleData(logger, articleTagsNumber),
+    );
+
+    await use(newArticles);
   },
   createArticlePage: async ({ page }, use) => {
     const createArticlePage = new CreateArticlePage(page);

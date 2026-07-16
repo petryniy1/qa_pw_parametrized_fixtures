@@ -38,7 +38,7 @@ export class EditArticlePage {
     }
   }
 
-    async updateTagsField(tagsArray) {
+  async updateTagsField(tagsArray) {
     if (!Array.isArray(tagsArray) || !tagsArray.length) return;
 
     for (const tag of tagsArray) {
