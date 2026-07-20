@@ -9,33 +9,29 @@ import { generateNewUserData } from '../../src/common/testData/generateNewUserDa
 const testParameters = [
   {
     title: 'empty username',
-    user: {
-      ...generateNewUserData(),
-      username: '',
-    },
+    overrides: { username: '' },
     errorMessage: EMPTY_USERNAME_MESSAGE,
   },
   {
     title: 'empty email',
-    user: {
-      ...generateNewUserData(),
-      email: '',
-    },
+    overrides: { email: '' },
     errorMessage: INVALID_EMAIL_MESSAGE,
   },
   {
     title: 'empty password',
-    user: {
-      ...generateNewUserData(),
-      password: '',
-    },
+    overrides: { password: '' },
     errorMessage: EMPTY_PASSWORD_MESSAGE,
   },
 ];
 
-testParameters.forEach(({ title, user, errorMessage }) => {
+testParameters.forEach(({ title, overrides, errorMessage }) => {
   test.describe('Sign up negative tests', () => {
-    test(`Sign up with ${title}`, async ({ signUpPage }) => {
+    test(`Sign up with ${title}`, async ({ signUpPage, logger }) => {
+      const user = {
+        ...generateNewUserData(logger),
+        ...overrides,
+      };
+
       await signUpPage.open();
       await signUpPage.submitSignUpForm(user);
       await signUpPage.assertErrorMessageContainsText(errorMessage);
